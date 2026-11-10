@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#315efb">
+  <meta name="description" content="課題・時間割・予定・テストをまとめて管理できる学生向けサービス。">
+  <title>STUDENT LIFE | 学生生活を、ひとつに。</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="STUDENT LIFE ホーム" data-page-link="dashboard">
+        <span class="brand-mark">S</span>
+        <span><strong>STUDENT LIFE</strong><small>学生生活を、ひとつに。</small></span>
+      </a>
+      <div class="side-label">MENU</div>
+      <nav class="side-nav" aria-label="メインメニュー">
+        <button class="nav-item active" data-page="dashboard"><span class="nav-icon">⌂</span>ホーム</button>
+        <button class="nav-item" data-page="tasks"><span class="nav-icon">✓</span>課題管理<span class="nav-count" id="taskNavCount">0</span></button>
+        <button class="nav-item" data-page="timetable"><span class="nav-icon">▦</span>時間割</button>
+        <button class="nav-item" data-page="calendar"><span class="nav-icon">▣</span>カレンダー</button>
+        <button class="nav-item" data-page="tests"><span class="nav-icon">✎</span>テスト管理</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span>設定</button>
+        <div class="storage-note"><span class="status-dot"></span><span>この端末にデータを保存中</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menuToggle" aria-label="メニューを開く">☰</button>
+        <div class="breadcrumb">STUDENT LIFE <span>/</span> <strong id="pageTitle">ホーム</strong></div>
+        <div class="topbar-actions">
+          <span class="today-label" id="todayLabel"></span>
+          <button class="avatar" id="profileButton" title="プロフィール設定">S</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="page-dashboard">
+          <div class="welcome-row">
+            <div><p class="eyebrow" id="welcomeDate"></p><h1>おかえりなさい<span id="userGreeting"></span></h1><p class="muted">今日やることを確認して、学生生活をスムーズに。</p></div>
+            <button class="primary-button" data-go="tasks">＋ 課題を追加</button>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-icon blue">✓</div><div><span>未完了の課題</span><strong id="statTasks">0</strong><small>件</small></div></article>
+            <article class="stat-card"><div class="stat-icon purple">▣</div><div><span>今日の予定</span><strong id="statEvents">0</strong><small>件</small></div></article>
+            <article class="stat-card"><div class="stat-icon orange">✎</div><div><span>登録済みテスト</span><strong id="statTests">0</strong><small>件</small></div></article>
+            <article class="stat-card"><div class="stat-icon green">✓</div><div><span>完了した課題</span><strong id="statDone">0</strong><small>件</small></div></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel">
+              <div class="panel-heading"><div><h2>今日の予定</h2><p>今日登録されている予定</p></div><button class="text-button" data-go="calendar">すべて見る →</button></div>
+              <div id="todayEvents" class="item-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-heading"><div><h2>課題の進捗</h2><p>提出に向けて計画的に進めよう</p></div><button class="text-button" data-go="tasks">課題一覧 →</button></div>
+              <div class="progress-wrap"><div class="progress-top"><strong id="progressText">0%</strong><span>完了率</span></div><div class="progress-track"><div id="progressBar" class="progress-fill"></div></div><div class="progress-foot"><span id="progressDone">0件完了</span><span id="progressRemain">0件残り</span></div></div>
+              <div class="mini-tip"><span>💡</span><p>課題は小さく分けると取り組みやすくなります。期限を登録して、忘れずに管理しましょう。</p></div>
+            </article>
+            <article class="panel">
+              <div class="panel-heading"><div><h2>期限が近い課題</h2><p>提出期限が近い順</p></div><button class="text-button" data-go="tasks">一覧 →</button></div>
+              <div id="upcomingTasks" class="item-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-heading"><div><h2>次のテスト</h2><p>直近のテスト予定</p></div><button class="text-button" data-go="tests">テスト一覧 →</button></div>
+              <div id="upcomingTests" class="item-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="page-tasks">
+          <div class="page-heading"><div><p class="eyebrow">TASK MANAGER</p><h1>課題管理</h1><p class="muted">課題の内容・提出期限・進捗をまとめて管理。</p></div><button class="primary-button" id="addTaskButton">＋ 課題を追加</button></div>
+          <div class="toolbar"><div class="search-wrap"><span>⌕</span><input id="taskSearch" type="search" placeholder="課題名・科目で検索"></div><select id="taskFilter" aria-label="課題の表示"><option value="all">すべての課題</option><option value="active">未完了</option><option value="done">完了済み</option></select><select id="taskSort" aria-label="並び順"><option value="deadline">期限が近い順</option><option value="created">追加した順</option><option value="subject">科目順</option></select></div>
+          <div class="panel"><div class="panel-heading"><div><h2>課題一覧</h2><p id="taskSummary">登録された課題</p></div></div><div id="taskList" class="task-list"></div></div>
+        </section>
+
+        <section class="page" id="page-timetable">
+          <div class="page-heading"><div><p class="eyebrow">TIMETABLE</p><h1>時間割</h1><p class="muted">曜日ごとの授業を登録して、毎日の予定を確認。</p></div><button class="primary-button" id="editTimetableButton">時間割を編集</button></div>
+          <div class="toolbar"><div class="segmented" id="daySelector"></div><span class="muted small" id="timetableHint">授業を登録するとここに表示されます。</span></div>
+          <div class="panel timetable-panel"><div id="timetableContent"></div></div>
+        </section>
+
+        <section class="page" id="page-calendar">
+          <div class="page-heading"><div><p class="eyebrow">CALENDAR</p><h1>カレンダー</h1><p class="muted">授業以外の予定やイベントをまとめて管理。</p></div><button class="primary-button" id="addEventButton">＋ 予定を追加</button></div>
+          <div class="calendar-layout">
+            <article class="panel calendar-panel">
+              <div class="calendar-header"><button class="icon-button" id="prevMonth" aria-label="前の月">‹</button><h2 id="calendarMonth"></h2><button class="icon-button" id="nextMonth" aria-label="次の月">›</button><button class="today-button" id="calendarToday">今日</button></div>
+              <div class="calendar-grid calendar-weekdays"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+              <div class="calendar-grid" id="calendarDays"></div>
+              <div class="calendar-legend"><span><i class="legend-dot blue-dot"></i>予定あり</span><span><i class="legend-dot orange-dot"></i>課題期限</span><span><i class="legend-dot purple-dot"></i>テスト</span></div>
+            </article>
+            <article class="panel selected-day-panel"><div class="panel-heading"><div><h2 id="selectedDateTitle">日付を選択</h2><p>選択した日の予定</p></div></div><div id="selectedDayItems" class="item-list"></div></article>
+          </div>
+        </section>
+
+        <section class="page" id="page-tests">
+          <div class="page-heading"><div><p class="eyebrow">EXAM PLANNER</p><h1>テスト管理</h1><p class="muted">テスト日程と範囲を整理して、学習計画に役立てよう。</p></div><button class="primary-button" id="addTestButton">＋ テストを追加</button></div>
+          <div class="panel"><div class="panel-heading"><div><h2>テスト一覧</h2><p>日付が近い順に表示</p></div></div><div id="testList" class="item-list"></div></div>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="page-heading"><div><p class="eyebrow">SETTINGS</p><h1>設定</h1><p class="muted">プロフィールやデータの管理。</p></div></div>
+          <div class="settings-grid">
+            <article class="panel settings-section"><h2>プロフィール</h2><p class="muted">ホーム画面に表示する名前を設定します。</p><label class="field-label" for="displayName">表示名</label><input id="displayName" class="form-control" maxlength="24" placeholder="名前を入力"><button class="primary-button" id="saveProfile">保存する</button></article>
+            <article class="panel settings-section"><h2>データのバックアップ</h2><p class="muted">データは現在このブラウザ内に保存されています。別の端末へ移す場合は、バックアップを利用してください。</p><div class="button-row"><button class="secondary-button" id="exportData">データを書き出す</button><label class="secondary-button file-label">バックアップを読み込む<input type="file" id="importData" accept="application/json"></label></div><p class="helper-text">読み込みを行うと、現在のデータはバックアップの内容に置き換わります。</p></article>
+            
+            <article class="panel settings-section"><h2>時間割の設定</h2>
+              <p class="muted">形式（通常または高専スタイル）、時限数、各時限の時刻を設定できます。</p>
+              
+              <label class="field-label" for="timetableMode">時間割の形式</label>
+              <select id="timetableMode" class="form-control">
+                <option value="normal">通常（1コマずつ：1, 2, 3...）</option>
+                <option value="kosen">高専スタイル（2コマまとめ：1-2, 3-4, 5-6, 7-8）</option>
+              </select>
+
+              <label class="field-label" for="periodCount" style="margin-top:12px;">時限数</label>
+              <select id="periodCount" class="form-control">
+                <option value="3">3時間目まで</option><option value="4">4時間目まで</option><option value="5">5時間目まで</option><option value="6">6時間目まで</option><option value="7">7時間目まで</option><option value="8">8時間目まで</option><option value="9">9時間目まで</option><option value="10">10時間目まで</option>
+              </select>
+              <div id="periodTimeSettings" class="period-time-settings"></div>
+              <button class="primary-button" id="saveTimetableSettings">時間割設定を保存</button>
+            </article>
+
+            <article class="panel settings-section"><h2>表示設定</h2><p class="muted">画面の見た目を変更できます。</p><label class="field-label" for="themeSelect">テーマ</label><select id="themeSelect" class="form-control"><option value="light">ライト</option><option value="dark">ダーク</option></select></article>
+            <article class="panel settings-section danger-zone"><h2>データの初期化</h2><p class="muted">すべての課題・予定・時間割・設定を削除します。この操作は取り消せません。</p><button class="danger-button" id="clearData">すべてのデータを削除</button></article>
+          </div>
+          <p class="version-note">STUDENT LIFE · Preview build 1.1 (Kosen support)</p>
+        </section>
+      </div>
+      <footer class="footer">STUDENT LIFE <span>学生生活を, ひとつに。</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><h2 id="modalTitle">追加</h2><button class="icon-button" id="modalClose" aria-label="閉じる">×</button></div>
+      <form id="modalForm"><div id="modalFields"></div><div class="modal-actions"><button type="button" class="secondary-button" id="modalCancel">キャンセル</button><button type="submit" class="primary-button" id="modalSubmit">保存する</button></div></form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
+```[cite: 4]
